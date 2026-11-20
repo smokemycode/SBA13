@@ -1,4 +1,5 @@
-import 'dotenv/config.js';
+// Load .env secrets then bring in Express
+import 'dotenv/config';
 import express from 'express';
 
 // Create the app
@@ -9,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 // Test route
 app.get('/', (req, res) => {
-    res.json({ message: 'Zenith Product is running!'})
+    res.json({ message: 'Zenith Product is running!'});
 });
 
 // Start the server
