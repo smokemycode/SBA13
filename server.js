@@ -1,13 +1,16 @@
-// Load .env secrets then bring in Express and Mongoose
 import 'dotenv/config';
 import express from 'express';
 import connectDB from './config/connection.js';
+import productRoutes from './routes/productRoutes.js';
 
 // Connect to MongoDB
 connectDB();
 
 // Create the app
 const app = express();
+
+// Use the product routes
+app.use(express.json());
 
 // Set the port
 const PORT = process.env.PORT || 3000;
@@ -16,6 +19,9 @@ const PORT = process.env.PORT || 3000;
 app.get('/', (req, res) => {
     res.json({ message: 'Zenith Product is running!'});
 });
+
+// Use the product routes
+app.use('/api/products', productRoutes);
 
 // Start the server
 app.listen(PORT, () => {

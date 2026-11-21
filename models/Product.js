@@ -1,6 +1,7 @@
 // Load Mongoose
 import mongoose from 'mongoose';
 
+// Define the Product schema
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
