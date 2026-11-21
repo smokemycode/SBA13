@@ -1,6 +1,10 @@
-// Load .env secrets then bring in Express
+// Load .env secrets then bring in Express and Mongoose
 import 'dotenv/config';
 import express from 'express';
+import connectDB from './config/connection.js';
+
+// Connect to MongoDB
+connectDB();
 
 // Create the app
 const app = express();
