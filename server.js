@@ -1,3 +1,4 @@
+// Load articles needed for the server
 import 'dotenv/config';
 import express from 'express';
 import connectDB from './config/connection.js';
@@ -9,7 +10,7 @@ connectDB();
 // Create the app
 const app = express();
 
-// Use the product routes
+// Middleware to turn JSON bodies into JS objects
 app.use(express.json());
 
 // Set the port

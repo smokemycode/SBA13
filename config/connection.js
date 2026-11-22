@@ -13,7 +13,7 @@ const connectDB = async () => {
 
     // Log problems that happen after the initial connection
     mongoose.connection.on('error', (err) => {
-        console.error('MongoDB error:', error.message);
+        console.error('MongoDB error:', err.message);
     });
 
     // Share the connection for use in other modules
