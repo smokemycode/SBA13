@@ -18,8 +18,19 @@ router.post('/', async (req, res) => {
 });
 
 // GET all products
-router.get('/', (req, res) => {
-    res.json({ message: 'Product routes connected!' });
+router.get('/:id', async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        res.status(200).json(product);
+    } catch (err) {
+        if (err.name === 'CastError') {
+            return res.status(400).json({ message: 'Invalid product ID' });
+        }
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // Export the router
