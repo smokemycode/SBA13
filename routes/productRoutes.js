@@ -20,10 +20,16 @@ router.post('/', async (req, res) => {
 // GET all products with filters
 router.get('/', async (req, res) => {
     try {
-        const { category } = req.query;
+        const { category, minPrice, maxPrice } = req.query;
         // Start empty and only add filters if they exist
-        let filter = {};
+        const filter = {};
         if (category) filter.category = category;
+        // Price range
+        if (minPrice || maxPrice) {
+            filter.price = {};
+            if (minPrice) filter.price.$gte = Number(minPrice);
+            if (maxPrice) filter.price.$lte = Number(maxPrice);
+        }
         const products = await Product.find(filter);
         res.status(200).json(products);
     } catch (err) {
@@ -31,7 +37,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-// GET all products
+// GET one product by ID
 router.get('/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id);
