@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 // GET all products with filters
 router.get('/', async (req, res) => {
     try {
-        const { category, minPrice, maxPrice, sortBy } = req.query;
+        const { category, minPrice, maxPrice, sortBy, page, limit } = req.query;
         // Start empty and only add filters if they exist
         const filter = {};
         if (category) filter.category = category;
@@ -37,9 +37,14 @@ router.get('/', async (req, res) => {
             name_asc: { name: 1 },
             newest: { createdAt: -1 },
         };
-        // Use the matching sort option or default to newest
+        // Use the matching sort option or default to no sort
         const sort = sortOptions[sortBy] || {};
-        const products = await Product.find(filter).sort(sort);
+        // Pagination default to page 1, 10 per page
+        const pageNum = Math.max(parseInt(page) || 1, 1);
+        const limitNum = Math.max(parseInt(limit) || 10, 1);
+        // Skip the products on previous pages
+        const skip = (pageNum - 1) * limitNum;
+        const products = await Product.find(filter).sort(sort).skip(skip).limit(limitNum);
         res.status(200).json(products);
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
