@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 // GET all products with filters
 router.get('/', async (req, res) => {
     try {
-        const { category, minPrice, maxPrice } = req.query;
+        const { category, minPrice, maxPrice, sortBy } = req.query;
         // Start empty and only add filters if they exist
         const filter = {};
         if (category) filter.category = category;
@@ -30,7 +30,16 @@ router.get('/', async (req, res) => {
             if (minPrice) filter.price.$gte = Number(minPrice);
             if (maxPrice) filter.price.$lte = Number(maxPrice);
         }
-        const products = await Product.find(filter);
+        // Sorting
+        const sortOptions = {
+            price_asc: { price: 1 },
+            price_desc: { price: -1 },
+            name_asc: { name: 1 },
+            newest: { createdAt: -1 },
+        };
+        // Use the matching sort option or default to newest
+        const sort = sortOptions[sortBy] || {};
+        const products = await Product.find(filter).sort(sort);
         res.status(200).json(products);
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
