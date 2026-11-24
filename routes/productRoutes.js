@@ -17,6 +17,20 @@ router.post('/', async (req, res) => {
     }
 });
 
+// GET all products with filters
+router.get('/', async (req, res) => {
+    try {
+        const { category } = req.query;
+        // Start empty and only add filters if they exist
+        let filter = {};
+        if (category) filter.category = category;
+        const products = await Product.find(filter);
+        res.status(200).json(products);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 // GET all products
 router.get('/:id', async (req, res) => {
     try {
